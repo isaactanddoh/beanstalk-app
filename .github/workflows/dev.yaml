@@ -19,8 +19,13 @@ jobs:
         working-directory: app
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          role-to-assume: 'arn:aws:iam::637423392537:role/GithubActions'
+          role-session-name: github-actions
 
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v1
@@ -39,14 +44,6 @@ jobs:
       - name: Create zip archive
         run: zip -r app.zip publish
 
-      - name: Assume AWS IAM Role
-        id: assume-role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: 'arn:aws:iam::637423392537:role/GithubActions'
-          role-session-name: github-actions
-          aws-region: 'us-east-1'
-
       - name: Build application (Release configuration)
         run: dotnet build --configuration Release
 
@@ -60,4 +57,4 @@ jobs:
             --region us-east-1
         env:
           EB_ENV_NAME: isaac-beanstalk-dev-DotNetEnvironment
-          APP_VERSION: 1.0
+          APP_VERSION: 1.0.0
