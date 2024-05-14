@@ -60,4 +60,4 @@ jobs:
             --region us-east-1
         env:
           EB_ENV_NAME: isaac-beanstalk-stg-DotNetEnvironment
-          APP_VERSION: 1.0.0
+          APP_VERSION: 1.0
