@@ -5,7 +5,9 @@ on:
     paths:
       - 'app/Program.cs'
     branches:
-      - dev
+      - prod
+  pull_request:
+    branches: [ "prod" ]
 
 permissions:
   contents: read
