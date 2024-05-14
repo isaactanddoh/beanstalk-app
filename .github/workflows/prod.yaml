@@ -40,9 +40,6 @@ jobs:
       - name: Build application
         run: dotnet build --configuration Release --no-restore
 
-      - name: Publish application
-        run: dotnet publish -c Release -o ./publish
-
       - name: Create zip archive
         run: zip -r app.zip publish
 
@@ -54,7 +51,7 @@ jobs:
           aws elasticbeanstalk update-environment \
             --application-name isaac-beanstalk-dev-DotNetApp \
             --environment-name ${{ env.EB_ENV_NAME }} \
-            --source-bundle fileb://./publish/app.zip \
+            --source-bundle app.zip \
             --version-label V${{ env.APP_VERSION }} \
             --region us-east-1
         env:
