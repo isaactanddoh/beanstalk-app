@@ -1,15 +1,15 @@
-name: Deploy App
+name: Deploy Dev App
 
 on:
   push:
     paths:
       - 'app/Program.cs'
     branches:
-      - prod
+      - dev
 
 permissions:
   contents: read
-  id-token: write
+  id-token: write      
 
 jobs:
   build-and-deploy:
@@ -19,8 +19,13 @@ jobs:
         working-directory: app
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          role-to-assume: 'arn:aws:iam::730335212900:role/GithubActions'
+          role-session-name: github-actions
 
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v1
@@ -39,25 +44,17 @@ jobs:
       - name: Create zip archive
         run: zip -r app.zip publish
 
-      - name: Assume AWS IAM Role
-        id: assume-role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: 'arn:aws:iam::637423392537:role/GithubActions'
-          role-session-name: github-actions
-          aws-region: 'us-east-1'
-
       - name: Build application (Release configuration)
         run: dotnet build --configuration Release
 
       - name: Deploy to Elastic Beanstalk
         run: |
           aws elasticbeanstalk update-environment \
-            --application-name isaac-beanstalk-prod-DotNetApp \
+            --application-name isaac-beanstalk-dev-DotNetApp \
             --environment-name ${{ env.EB_ENV_NAME }} \
-            --source-bundle fileb://./app/bin/Release/netcoreapp3.1/publish/app.zip \
+            --source-bundle fileb://./publish/app.zip \
             --version-label V${{ env.APP_VERSION }} \
             --region us-east-1
         env:
-          EB_ENV_NAME: isaac-beanstalk-prod-DotNetEnvironment
-          APP_VERSION: 1.0
+          EB_ENV_NAME: isaac-beanstalk-dev-DotNetEnvironment
+          APP_VERSION: 1.0.0
