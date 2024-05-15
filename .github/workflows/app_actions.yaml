@@ -6,7 +6,7 @@ on:
       - 'Program.cs'
 
     branches:
-        - main
+      - main
 
 jobs:
   deploy:
