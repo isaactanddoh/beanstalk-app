@@ -3,7 +3,7 @@ name: Deploy App
 on:
   push:
     paths:
-      - 'app/Program.cs'
+      - Program.cs
     branches:
       - main
 
