@@ -5,6 +5,9 @@ on:
     paths:
       - 'Program.cs'
 
+    branches:
+        - main
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
