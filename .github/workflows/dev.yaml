@@ -49,11 +49,10 @@ jobs:
 
       - name: Deploy to Elastic Beanstalk
         run: |
-
           aws elasticbeanstalk create-application-version \
             --application-name isaac-beanstalk-dev-DotNetApp \
             --version-label V${{ env.APP_VERSION }} \
-            --source-bundle fileb://./publish/app.zip \
+            --source-bundle fileb://./app.zip \
             --region us-east-1      
 
           aws elasticbeanstalk update-environment \
