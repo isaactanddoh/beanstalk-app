@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults: 
       run: 
-        working-directory: s3-backend 
+        working-directory: app 
 
     permissions:
       id-token: write
