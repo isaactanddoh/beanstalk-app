@@ -1,0 +1,45 @@
+name: Deploy to Elastic Beanstalk
+
+on:
+  push:
+    paths:
+      - 'Program.cs'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.100'
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Publish
+      run: dotnet publish --configuration Release --output ./app --no-restore
+
+    - name: Configure AWS credentials
+      id: configure-aws-credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::637423392537:role/GithubActions
+        role-session-name: github-actions
+        aws-region: us-east-1
+
+    - run: |
+          zip -r my_dotnet_app.zip ./app
+          aws elasticbeanstalk create-application-version --application-name MyDotnetApp --version-label $GITHUB_SHA --source-bundle S3Bucket=elasticbeanstalk-us-east-1-637423392537,S3Key=app.zip
+          aws elasticbeanstalk update-environment --environment-name isaac-beanstalk-dev-DotNetEnvironment --version-label $GITHUB_SHA
