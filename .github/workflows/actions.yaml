@@ -3,7 +3,7 @@ name: Deploy App
 on:
   push:
     paths:
-      - Program.cs
+      - 'app/Program.cs'
     branches:
       - main
 
@@ -25,7 +25,7 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 8.0.00
+          dotnet-version: 8.0.x
 
       - name: Restore dependencies
         run: dotnet restore
