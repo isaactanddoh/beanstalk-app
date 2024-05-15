@@ -11,6 +11,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults: 
+      run: 
+        working-directory: s3-backend 
 
     permissions:
       id-token: write
