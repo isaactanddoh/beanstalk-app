@@ -2,12 +2,8 @@ name: Deploy to Elastic Beanstalk
 
 on:
   push:
-    paths:
-      - 'app/Program.cs'
-
     branches:
       - main
-      - master
 
 jobs:
   deploy:
