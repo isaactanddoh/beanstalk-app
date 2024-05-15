@@ -6,6 +6,12 @@ on:
       - 'app/Program.cs'
     branches:
       - stg
+  pull_request:
+    branches: [ "stg" ]
+
+permissions:
+  contents: read
+  id-token: write      
 
 permissions:
   contents: read
@@ -19,8 +25,13 @@ jobs:
         working-directory: app
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          role-to-assume: 'arn:aws:iam::767397701747:role/GithubActions'
+          role-session-name: github-actions
 
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v1
@@ -39,20 +50,21 @@ jobs:
       - name: Create zip archive
         run: zip -r app.zip publish
 
-      - name: Assume AWS IAM Role
-        id: assume-role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: 'arn:aws:iam::637423392537:role/GithubActions'
-          role-session-name: github-actions
-          aws-region: 'us-east-1'
-
       - name: Build application (Release configuration)
         run: dotnet build --configuration Release
 
       - name: Deploy to Elastic Beanstalk
         run: |
           aws elasticbeanstalk create-application-version \
+<<<<<<< HEAD
+=======
+            --application-name isaac-beanstalk-stg-DotNetApp \
+            --version-label V${{ env.APP_VERSION }} \
+            --source-bundle fileb://./app.zip \
+            --region us-east-1      
+
+          aws elasticbeanstalk update-environment \
+>>>>>>> 681382554b151956172c9bf810b1d79dce7d44c1
             --application-name isaac-beanstalk-stg-DotNetApp \
             --version-label V${{ env.APP_VERSION }} \
             --source-bundle fileb://./app.zip \

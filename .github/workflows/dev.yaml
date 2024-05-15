@@ -9,7 +9,11 @@ on:
 
 permissions:
   contents: read
+<<<<<<< HEAD
   id-token: write
+=======
+  id-token: write      
+>>>>>>> 681382554b151956172c9bf810b1d79dce7d44c1
 
 jobs:
   build-and-deploy:
@@ -19,11 +23,16 @@ jobs:
         working-directory: app
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          role-to-assume: 'arn:aws:iam::637423392537:role/GithubActions'
+          role-session-name: github-actions
 
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.100
 
@@ -39,21 +48,17 @@ jobs:
       - name: Create zip archive
         run: zip -r app.zip publish
 
-      - name: Assume AWS IAM Role
-        id: assume-role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: 'arn:aws:iam::637423392537:role/GithubActions'
-          role-session-name: github-actions
-          aws-region: 'us-east-1'
-
       - name: Build application (Release configuration)
         run: dotnet build --configuration Release
 
       - name: Deploy to Elastic Beanstalk
         run: |
           aws elasticbeanstalk create-application-version \
+<<<<<<< HEAD
             --application-name isaac-beanstalk-prod-DotNetApp \
+=======
+            --application-name isaac-beanstalk-dev-DotNetApp \
+>>>>>>> 681382554b151956172c9bf810b1d79dce7d44c1
             --version-label V${{ env.APP_VERSION }} \
             --source-bundle fileb://./app.zip \
             --region us-east-1      
@@ -64,5 +69,9 @@ jobs:
             --version-label V${{ env.APP_VERSION }} \
             --region us-east-1
         env:
+<<<<<<< HEAD
           EB_ENV_NAME: isaac-beanstalk-prod-DotNetEnvironment
+=======
+          EB_ENV_NAME: isaac-beanstalk-dev-DotNetEnvironment
+>>>>>>> 681382554b151956172c9bf810b1d79dce7d44c1
           APP_VERSION: 1.0.0
