@@ -45,5 +45,5 @@ jobs:
     - run: |
           zip -r app.zip ./app
           aws s3 cp app.zip s3://beanstalk-bucket-150524/app.zip
-          aws elasticbeanstalk create-application-version --application-name isaac-beanstalk-dev-DotNetApp --version-label v1 --source-bundle S3Bucket=beanstalk-bucket-150524,S3Key=app.zip
-          aws elasticbeanstalk update-environment --environment-name isaac-beanstalk-dev-DotNetEnvironment --version-label v1
+          aws elasticbeanstalk create-application-version --application-name isaac-beanstalk-dev-DotNetApp --version-label v2 --source-bundle S3Bucket=beanstalk-bucket-150524,S3Key=app.zip
+          aws elasticbeanstalk update-environment --environment-name isaac-beanstalk-dev-DotNetEnvironment --version-label v2
