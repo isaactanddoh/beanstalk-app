@@ -49,7 +49,7 @@ jobs:
       run: aws s3 cp app.zip s3://isaac-beanstalk-stg-bucket/app.zip
 
     - name: Create new application version
-      run: aws elasticbeanstalk create-application-version --application-name isaac-beanstalk-stg-DotNetApp --version-label --version-label v1.0.0 --source-bundle S3Bucket=isaac-beanstalk-stg-bucket,S3Key=app.zip
+      run: aws elasticbeanstalk create-application-version --application-name isaac-beanstalk-stg-DotNetApp --version-label --version-label v1.0.1 --source-bundle S3Bucket=isaac-beanstalk-stg-bucket,S3Key=app.zip
 
     - name: Update Elastic Beanstalk environment
-      run: aws elasticbeanstalk update-environment --environment-name isaac-beanstalk-stg-DotNetEnvironment --version-label --version-label v1.0.0
+      run: aws elasticbeanstalk update-environment --environment-name isaac-beanstalk-stg-DotNetEnvironment --version-label --version-label v1.0.1
