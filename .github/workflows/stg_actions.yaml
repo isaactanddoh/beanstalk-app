@@ -1,0 +1,49 @@
+name: Deploy to App to Staging EB Environment
+
+on:
+  push:
+    branches:
+      - stg
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults: 
+      run: 
+        working-directory: app 
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.100'
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Publish
+      run: dotnet publish --configuration Release --output ./app --no-restore
+
+    - name: Configure AWS credentials
+      id: configure-aws-credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::767397701747:role/GithubActions
+        role-session-name: github-actions
+        aws-region: us-east-1
+
+    - run: |
+          zip -r app.zip ./app
+          aws s3 cp app.zip s3://isaac-beanstalk-stg-bucket/app.zip
+          aws elasticbeanstalk create-application-version --application-name isaac-beanstalk-dev-DotNetApp --version-label $GITHUB_SHA --source-bundle S3Bucket=isaac-beanstalk-stg-bucket,S3Key=app.zip
+          aws elasticbeanstalk update-environment --environment-name isaac-beanstalk-dev-DotNetEnvironment --version-label $GITHUB_SHA
