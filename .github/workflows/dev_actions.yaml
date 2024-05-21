@@ -1,9 +1,9 @@
-name: Deploy to Elastic Beanstalk
+name: Deploy to App to Dev EB Environment
 
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   deploy:
@@ -44,6 +44,6 @@ jobs:
 
     - run: |
           zip -r app.zip ./app
-          aws s3 cp app.zip s3://beanstalk-bucket-150524/app.zip
-          aws elasticbeanstalk create-application-version --application-name isaac-beanstalk-dev-DotNetApp --version-label $GITHUB_SHA --source-bundle S3Bucket=beanstalk-bucket-150524,S3Key=app.zip
+          aws s3 cp app.zip s3://isaac-beanstalk-dev-bucket/app.zip
+          aws elasticbeanstalk create-application-version --application-name isaac-beanstalk-dev-DotNetApp --version-label $GITHUB_SHA --source-bundle S3Bucket=isaac-beanstalk-dev-bucket,S3Key=app.zip
           aws elasticbeanstalk update-environment --environment-name isaac-beanstalk-dev-DotNetEnvironment --version-label $GITHUB_SHA
