@@ -1,16 +1,16 @@
-name: Deploy to App to Staging EB Environment
+name: Deploy to App to stg EB Environment
 
 on:
   push:
     branches:
-      - stg
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     defaults: 
       run: 
-        working-directory: app 
+        working-directory: app
 
     permissions:
       id-token: write
@@ -29,10 +29,10 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release
 
     - name: Publish
-      run: dotnet publish --configuration Release --output ./app --no-restore
+      run: dotnet publish --configuration Release --output ./publish
 
     - name: Configure AWS credentials
       id: configure-aws-credentials
@@ -42,8 +42,14 @@ jobs:
         role-session-name: github-actions
         aws-region: us-east-1
 
-    - run: |
-          zip -r app.zip ./app
-          aws s3 cp app.zip s3://isaac-beanstalk-stg-bucket/app.zip
-          aws elasticbeanstalk create-application-version --application-name isaac-beanstalk-dev-DotNetApp --version-label $GITHUB_SHA --source-bundle S3Bucket=isaac-beanstalk-stg-bucket,S3Key=app.zip
-          aws elasticbeanstalk update-environment --environment-name isaac-beanstalk-dev-DotNetEnvironment --version-label $GITHUB_SHA
+    - name: Zip published application
+      run: zip -r app.zip ./publish
+
+    - name: Upload to S3
+      run: aws s3 cp app.zip s3://isaac-beanstalk-stg-bucket/app.zip
+
+    - name: Create new application version
+      run: aws elasticbeanstalk create-application-version --application-name isaac-beanstalk-stg-DotNetApp --version-label --version-label v1.0.0 --source-bundle S3Bucket=isaac-beanstalk-stg-bucket,S3Key=app.zip
+
+    - name: Update Elastic Beanstalk environment
+      run: aws elasticbeanstalk update-environment --environment-name isaac-beanstalk-stg-DotNetEnvironment --version-label --version-label v1.0.0
