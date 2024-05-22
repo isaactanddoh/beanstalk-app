@@ -558,19 +558,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\IsaacTandoh\\.nuget\\packages\\": {}
+    "C:\\Users\\airen\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\IsaacTandoh\\Downloads\\isaac_tandoh\\DevOps-Projects\\beanstalk-app\\app\\Eshop.csproj",
+      "projectUniqueName": "D:\\Projects\\jay\\Eshop\\Eshop.csproj",
       "projectName": "Eshop",
-      "projectPath": "C:\\Users\\IsaacTandoh\\Downloads\\isaac_tandoh\\DevOps-Projects\\beanstalk-app\\app\\Eshop.csproj",
-      "packagesPath": "C:\\Users\\IsaacTandoh\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\IsaacTandoh\\Downloads\\isaac_tandoh\\DevOps-Projects\\beanstalk-app\\app\\obj\\",
+      "projectPath": "D:\\Projects\\jay\\Eshop\\Eshop.csproj",
+      "packagesPath": "C:\\Users\\airen\\.nuget\\packages\\",
+      "outputPath": "D:\\Projects\\jay\\Eshop\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\IsaacTandoh\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\airen\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -588,11 +588,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -623,7 +618,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
