@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'app/**'      
 
 jobs:
   deploy:
@@ -23,16 +25,16 @@ jobs:
     - name: Set up .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.100'
+        dotnet-version: '8.0.x'
 
     - name: Restore dependencies
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --configuration Release
+      run: dotnet build -c Release -o ./publish
 
     - name: Publish
-      run: dotnet publish --configuration Release --output ./publish
+      run: dotnet publish -c Release -o ./publish
 
     - name: Configure AWS credentials
       id: configure-aws-credentials
@@ -49,7 +51,7 @@ jobs:
       run: aws s3 cp app.zip s3://isaac-beanstalk-dev-bucket/app.zip
 
     - name: Create new application version
-      run: aws elasticbeanstalk create-application-version --application-name isaac-beanstalk-dev-DotNetApp --version-label v1.0.1 --source-bundle S3Bucket=isaac-beanstalk-dev-bucket,S3Key=app.zip
+      run: aws elasticbeanstalk create-application-version --application-name isaac-beanstalk-dev-DotNetApp --version-label $GITHUB_SHA --source-bundle S3Bucket=isaac-beanstalk-dev-bucket,S3Key=app.zip
 
     - name: Update Elastic Beanstalk environment
-      run: aws elasticbeanstalk update-environment --environment-name isaac-beanstalk-dev-DotNetEnvironment --version-label v1.0.1
+      run: aws elasticbeanstalk update-environment --environment-name isaac-beanstalk-dev-DotNetEnvironment --version-label $GITHUB_SHA
