@@ -31,7 +31,7 @@ jobs:
     #     dotnet publish -c Release -o ${{ github.workspace }}/publish
 
     - name: Zip published application
-      run: zip -r deploy.zip . -x '*.git*'
+      run: zip -r app.zip . -x '*.git*'
 
     - name: Configure AWS credentials
       id: configure-aws-credentials
