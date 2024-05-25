@@ -39,6 +39,9 @@ jobs:
           Compress-Archive -Path * -DestinationPath ../app.zip
           cd ..
 
+    - name: List files for debugging
+      run: dir ${{ github.workspace }}
+
     - name: Configure AWS credentials
       id: configure-aws-credentials
       uses: aws-actions/configure-aws-credentials@v3
@@ -48,7 +51,7 @@ jobs:
         aws-region: us-east-1
 
     - name: Upload to S3
-      run: aws s3 cp app.zip s3://isaac-beanstalk-dev-bucket/app.zip
+      run: aws s3 cp ${{ github.workspace }}\app.zip s3://isaac-beanstalk-dev-bucket/app.zip
 
     - name: Create new application version
       run: aws elasticbeanstalk create-application-version --application-name isaac-beanstalk-dev-DotNetApp --version-label $GITHUB_SHA --source-bundle S3Bucket=isaac-beanstalk-dev-bucket,S3Key=app.zip
