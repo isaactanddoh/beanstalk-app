@@ -8,9 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults: 
-      run: 
-        working-directory: app
 
     permissions:
       id-token: write
@@ -20,30 +17,29 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+    # - name: Set up .NET
+    #   uses: actions/setup-dotnet@v4
+    #   with:
+    #     dotnet-version: '8.0.1'
 
-    - name: Restore dependencies
-      run: dotnet restore
+    # - name: Restore dependencies
+    #   run: dotnet restore
 
-    - name: Build
-      run: dotnet build --no-restore
+    # - name: Build
+    #   run: |
+    #     dotnet build
+    #     dotnet publish -c Release -o ${{ github.workspace }}/publish
 
-    - name: Publish
-      run: dotnet publish --configuration Release --output ./publish
+    - name: Zip published application
+      run: zip -r deploy.zip . -x '*.git*'
 
     - name: Configure AWS credentials
       id: configure-aws-credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        role-to-assume: arn:aws:iam::637423392537:role/GithubActions
+        role-to-assume: ${{ vars.DEV_ROLE }}
         role-session-name: github-actions
         aws-region: us-east-1
-
-    - name: Zip published application
-      run: zip -r app.zip ./publish
 
     - name: Upload to S3
       run: aws s3 cp app.zip s3://isaac-beanstalk-dev-bucket/app.zip
