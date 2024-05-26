@@ -1,4 +1,6 @@
-name: Deploy App to Dev EB Environment
+# Development Deployment Workflow
+
+name: Deploy Web App to Dev EB Environment
 
 on:
   push:

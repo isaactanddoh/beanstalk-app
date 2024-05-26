@@ -1,3 +1,5 @@
+# Staging Deployment Workflow
+
 name: Deploy Web App to Staging EB Environment
 
 on:
