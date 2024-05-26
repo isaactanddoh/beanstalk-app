@@ -1,4 +1,4 @@
-name: Deploy App to Dev EB Environment
+name: Deploy Web App to Prod EB Environment
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy Dev Web App
+    name: Deploy Prod Web App
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -48,7 +48,7 @@ jobs:
       id: configure-aws-credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
-        role-to-assume: ${{ vars.DEV_ROLE }}
+        role-to-assume: ${{ vars.PROD_ROLE }}
         role-session-name: github-actions
         aws-region: us-east-1
 
