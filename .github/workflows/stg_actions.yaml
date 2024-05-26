@@ -60,7 +60,7 @@ jobs:
       run: aws s3 cp ${{ github.workspace }}/app.zip s3://isaac-beanstalk-stg-bucket/app.zip
 
     - name: Create new application version
-      run: aws elasticbeanstalk create-application-version --application-name ${{ vars.STG_APP }} --version-label ${{ github.sha }} --source-bundle S3Bucket=isaac-beanstalk-dev-bucket,S3Key=app.zip
+      run: aws elasticbeanstalk create-application-version --application-name ${{ vars.STG_APP }} --version-label ${{ github.sha }} --source-bundle S3Bucket=isaac-beanstalk-stg-bucket,S3Key=app.zip
 
     - name: Update Elastic Beanstalk environment
       run: aws elasticbeanstalk update-environment --environment-name ${{ vars.STG_ENV }} --version-label ${{ github.sha }}
