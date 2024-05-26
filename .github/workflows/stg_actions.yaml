@@ -3,6 +3,8 @@
 name: Deploy Web App to Staging EB Environment
 
 on:
+  workflow_dispatch:
+
   push:
     branches:
       - main
