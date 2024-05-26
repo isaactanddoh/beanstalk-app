@@ -1,4 +1,4 @@
-name: Deploy to App to dev EB Environment
+name: Deploy App to dev EB Environment
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: app
@@ -35,12 +35,11 @@ jobs:
 
     - name: Zip published application
       run: |
-          cd ${{ github.workspace }}/publish
-          Compress-Archive -Path * -DestinationPath ../app.zip
-          cd ..
+        cd ${{ github.workspace }}/publish
+        zip -r ../app.zip .
 
     - name: List files for debugging
-      run: dir ${{ github.workspace }}
+      run: ls -la ${{ github.workspace }}
 
     - name: Configure AWS credentials
       id: configure-aws-credentials
@@ -51,7 +50,7 @@ jobs:
         aws-region: us-east-1
 
     - name: Upload to S3
-      run: aws s3 cp ${{ github.workspace }}\app.zip s3://isaac-beanstalk-dev-bucket/app.zip
+      run: aws s3 cp ${{ github.workspace }}/app.zip s3://isaac-beanstalk-dev-bucket/app.zip
 
     - name: Create new application version
       run: aws elasticbeanstalk create-application-version --application-name isaac-beanstalk-dev-DotNetApp --version-label ${{ github.sha }} --source-bundle S3Bucket=isaac-beanstalk-dev-bucket,S3Key=app.zip
